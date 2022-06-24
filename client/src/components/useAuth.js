@@ -8,7 +8,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
-  console.log("uid", uid);
 
   useEffect(() => {
     async function checkToken() {

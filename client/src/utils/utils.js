@@ -8,6 +8,28 @@ export const dateParser = (time) => {
   return date.toString();
 };
 
+export const dateParserPost = (time) => {
+  const oneHour = 3600;
+  const oneDay = 86400;
+  let timePassed = Date.now() - Date.parse(time);
+
+  let options = {};
+  let date = "";
+
+  if (timePassed < oneHour) {
+    options = { minute: "numeric" };
+    date = new Date(timePassed).toLocaleDateString("fr-Fr", options);
+  } else if (timePassed >= oneHour && timePassed < oneDay) {
+    options = { hour: "numeric" };
+    date = new Date(timePassed).toLocaleDateString("fr-Fr", options);
+  } else {
+    options = { day: "numeric", month: "short" };
+    date = new Date(timePassed).toLocaleDateString("fr-Fr", options);
+  }
+
+  return date.toString();
+};
+
 export const isEmpty = (value) => {
   return (
     value === undefined ||

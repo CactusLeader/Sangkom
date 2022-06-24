@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../utils/utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 
 const UserProfil = ({
   setUpdateProfilModal,
@@ -49,7 +49,10 @@ const UserProfil = ({
         <span>{userData.bio}</span>
       </div>
       <div className="ml-4 my-2 text-gray-600">
-        A rejoint Sangkom en {dateParser(userData.createdAt)}
+        <FontAwesomeIcon icon={faCalendarDays} />
+        <span className="ml-2">
+          A rejoint Sangkom en {dateParser(userData.createdAt)}
+        </span>
       </div>
       <div className="flex flex-row ml-4">
         <div

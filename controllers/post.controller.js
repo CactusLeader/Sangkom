@@ -3,11 +3,19 @@ const UserModel = require("../models/user.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 const upload = require("../middleware/multer.middleware");
 
-module.exports.readPost = (req, res) => {
-  PostModel.find((err, docs) => {
-    if (!err) res.send(docs);
-    else console.log("Get data error :" + err);
-  }).sort({ createdAt: -1 });
+module.exports.readPost = async (req, res) => {
+  // PostModel.find((err, docs) => {
+  //   if (!err) res.send(docs);
+  //   else console.log("Get data error :" + err);
+  // }).sort({ createdAt: -1 });
+
+  try {
+    await PostModel.find()
+      // .sort({ createdAt: -1 })
+      .then((docs) => res.status(200).send(docs));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports.createPost = async (req, res) => {
@@ -72,7 +80,7 @@ module.exports.likePost = async (req, res) => {
     return res.status(400).send("ID Unknown :" + req.params.id);
 
   try {
-    const likerUpdate = await PostModel.findOneAndUpdate(
+    const likerUpdate = await PostModel.findByIdAndUpdate(
       req.params.id,
       {
         $addToSet: { liker: req.body.id },
@@ -80,7 +88,7 @@ module.exports.likePost = async (req, res) => {
       { new: true }
     );
 
-    const likesUpdate = await UserModel.findOneAndUpdate(
+    const likesUpdate = await UserModel.findByIdAndUpdate(
       req.body.id,
       {
         $addToSet: { likes: req.params.id },
@@ -99,7 +107,7 @@ module.exports.unlikePost = async (req, res) => {
     return res.status(400).send("ID Unknown :" + req.params.id);
 
   try {
-    const likerUpdate = await PostModel.findOneAndUpdate(
+    await PostModel.findByIdAndUpdate(
       req.params.id,
       {
         $pull: { liker: req.body.id },
@@ -107,15 +115,15 @@ module.exports.unlikePost = async (req, res) => {
       { new: true }
     );
 
-    const likesUpdate = await UserModel.findOneAndUpdate(
+    await UserModel.findByIdAndUpdate(
       req.body.id,
       {
         $pull: { likes: req.params.id },
       },
       { new: true }
-    );
+    ).then((data) => res.send(data));
 
-    return res.status(200).json(likesUpdate);
+    // return res.status(200).json(likesUpdate);
   } catch (err) {
     return res.status(400).send(err);
   }

@@ -1,9 +1,11 @@
 import Navbar from "../components/navbar";
+import Thread from "../components/thread";
 
 const Home = () => {
   return (
-    <div>
+    <div className="container flex flex-row">
       <Navbar />
+      <Thread />
     </div>
   );
 };
