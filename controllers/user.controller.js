@@ -12,7 +12,6 @@ module.exports.userInfo = (req, res) => {
     return res.status(400).send("ID unknown :" + req.params.id);
 
   UserModel.findById(req.params.id, (err, docs) => {
-    // console.log("docs", docs);
     if (!err) res.send(docs);
     else console.log("ID Unknown :" + err);
   }).select("-password");
@@ -20,9 +19,8 @@ module.exports.userInfo = (req, res) => {
 
 module.exports.updateUser = async (req, res) => {
   // console.log("ObjectID", ObjectID);
-  // if (!ObjectID.isValid(req.params.id))
-  //   return res.status(400).send("ID unknown :" + req.params.id);
-  console.log("--- TEST EN COURS", req.body.bio);
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown :" + req.params.id);
 
   try {
     await UserModel.findOneAndUpdate(

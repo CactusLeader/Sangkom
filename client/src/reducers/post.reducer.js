@@ -3,6 +3,7 @@ import {
   GET_POSTS,
   LIKE_POST,
   UNLIKE_POST,
+  UPDATE_POST,
 } from "../actions/post.actions";
 
 export default function postsReducer(state = {}, action) {
@@ -28,6 +29,16 @@ export default function postsReducer(state = {}, action) {
       });
     case DELETE_POST:
       return state.filter((post) => post._id !== action.payload.postId);
+    case UPDATE_POST:
+      return state.map((post) => {
+        if (post._id === action.payload.postId) {
+          return {
+            ...post,
+            message: action.payload.message,
+          };
+        }
+        return post;
+      });
     default:
       return state;
   }

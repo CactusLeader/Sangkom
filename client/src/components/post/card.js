@@ -1,22 +1,30 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from "../../actions/post.actions";
 import { dateParserPost, isEmpty } from "../../utils/utils";
+import Comments from "./comments";
 import LikeButton from "./likeButton";
 import WhisperDropdown from "./whisperDropdown";
 
 const Card = ({ post }) => {
   const [isLoading, setIsLoading] = useState(true);
   const usersData = useSelector((state) => state.users);
-
   const [isUpdated, setIsUpdated] = useState(false);
   const [textUpdate, setTextUpdate] = useState(null);
+  const [showComments, setShowComments] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     !isEmpty(usersData[0]) && setIsLoading(false);
   }, [usersData]);
 
-  const updateItem = async () => {};
+  const updateItem = () => {
+    if (textUpdate) {
+      dispatch(updatePost(post._id, textUpdate));
+    }
+    setIsUpdated(false);
+  };
 
   return (
     <li key={post._id}>
@@ -28,7 +36,7 @@ const Card = ({ post }) => {
             usersData.map((user) => {
               if (user._id === post.posterId) {
                 return (
-                  <div className="flex flex-row py-4 px-4 border-gray-200 border border-l-0 w-full">
+                  <div className="flex flex-row pt-4 px-4 border-gray-200 border border-l-0 w-full">
                     <img
                       src={user.avatar}
                       alt="user-avatar"
@@ -79,25 +87,30 @@ const Card = ({ post }) => {
                           allowFullScreen
                         ></iframe>
                       )}
-                      {/* {usersData._id === post.posterId && (
-                        <div onClick={() => setIsUpdated(true)}></div>
-                      )} */}
-                      <div className="flex flex-row justify-between pt-2">
-                        <div className="comment-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="2"
+                      <div className="flex flex-row justify-between p-1">
+                        <div className="flex flex-row items-center text-gray-500 hover:text-blue-400">
+                          <div
+                            className="hover:bg-blue-100 rounded-full p-2"
+                            onClick={() => setShowComments(!showComments)}
                           >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                            />
-                          </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                              />
+                            </svg>
+                          </div>
+                          {post.comments.length > 0 && (
+                            <span className="pl-1">{post.comments.length}</span>
+                          )}
                         </div>
                         <LikeButton post={post} />
                         <div>
@@ -112,12 +125,13 @@ const Card = ({ post }) => {
                             <path
                               stroke-linecap="round"
                               stroke-linejoin="round"
-                              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                             />
                           </svg>
                         </div>
                       </div>
                     </div>
+                    {showComments && <Comments post={post} />}
                   </div>
                 );
               }

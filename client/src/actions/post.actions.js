@@ -57,4 +57,16 @@ export const deletePost = (postId) => async (dispatch) => {
   }
 };
 
-export const updatePost = () => async () => {};
+export const updatePost = (postId, message) => async (dispatch) => {
+  try {
+    await axios
+      .put(`${process.env.REACT_APP_API_URL}posts/${postId}`, {
+        message: message,
+      })
+      .then((res) => {
+        dispatch({ type: UPDATE_POST, payload: { message, postId } });
+      });
+  } catch (err) {
+    console.log(err);
+  }
+};

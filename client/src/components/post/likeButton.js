@@ -27,9 +27,9 @@ const LikeButton = ({ post }) => {
   }, [userData, post.likers, liked]);
 
   return (
-    <div className="flex flex-row items-center text-gray-500 hover:text-red-600 relative">
+    <div className="flex flex-row items-center text-gray-500 hover:text-red-600">
       <div
-        className="hover:bg-red-100 rounded-full p-2 absolute right-0"
+        className="hover:bg-red-100 rounded-full p-2"
         onClick={liked ? unlike : like}
       >
         {!liked && (
@@ -62,7 +62,7 @@ const LikeButton = ({ post }) => {
         )}
       </div>
       {post.likers.length > 0 && (
-        <span className="absolute left-1">{post.likers.length}</span>
+        <span className="pl-1">{post.likers.length}</span>
       )}
     </div>
   );
