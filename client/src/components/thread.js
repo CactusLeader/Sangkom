@@ -30,7 +30,7 @@ const Thread = () => {
   }, [loadPost, dispatch, count]);
 
   return (
-    <div className="w-3/6">
+    <div className="w-full">
       <ul>
         {!isEmpty(posts[0]) &&
           posts.map((post) => {
